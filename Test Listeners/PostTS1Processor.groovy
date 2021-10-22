@@ -5,23 +5,21 @@ import java.nio.file.Paths
 import com.kms.katalon.core.annotation.AfterTestSuite
 import com.kms.katalon.core.configuration.RunConfiguration
 import com.kms.katalon.core.context.TestSuiteContext
-import com.kazurayam.subprocessj.Subprocess;
-import com.kazurayam.subprocessj.Subprocess.CompletedProcess;
+import com.kazurayam.subprocessj.Subprocess
+import com.kazurayam.subprocessj.Subprocess.CompletedProcess
+import com.kazurayam.ks.posttestsuiteprocessing.CommandGenerator
 
-class TL_postTS1_processing {
+class PostTS1Processor {
 	
-	// the project's home directoory
+	// the project's home directory
 	Path projectDir
 	
 	// work directory where the command file and the zip files are stored
 	Path outDir
-	
-	// name of the command file
-	static final String COMMAND_FILE_NAME = "zipIt.sh"
 	 
-	TL_postTS1_processing() {
+	PostTS1Processor() {
 		projectDir = Paths.get(RunConfiguration.getProjectDir())
-		outDir = projectDir.resolve("out")
+		outDir = projectDir.relativize(projectDir.resolve("out"))
 		// create the outDir
 		Files.createDirectories(outDir)
 	}
@@ -31,19 +29,16 @@ class TL_postTS1_processing {
 		// only when TS1 was executed
 		if (testSuiteContext.getTestSuiteId() == 'Test Suites/TS1') {
 			// create the command file
-			Path tsReportDir = projectDir.relativize(Paths.get(RunConfiguration.getReportFolder()))
-			String timestamp = tsReportDir.getFileName()
-			Path commandFile = outDir.resolve(COMMAND_FILE_NAME)
+			Path testSuiteReportDir = projectDir.relativize(Paths.get(RunConfiguration.getReportFolder()))
+			String timestamp = testSuiteReportDir.getFileName()
+			String archiveName = "Reports_" + timestamp
 			
-			// stuff the command file with shell script
-			// here I used bash script,
-			// but you can use whatever scripting engine you like
-			// e.g, Powershell, Python, Groovy, etc
-			commandFile.text = """
-zip Reports_${timestamp} -r \"${tsReportDir}\"
-mv Reports_${timestamp}.zip \"${outDir}/\"
-"""
+			// Shell script file to be generated here
+			Path commandFile = outDir.resolve(CommandGenerator.SH_FILENAME)
 			
+			// generate a shell script file which create a zip of Report, and try to POST it to a URL
+			commandFile.text = CommandGenerator.doZipAndPost(testSuiteReportDir, archiveName, outDir)
+						
 			// do "chmod +x" to make the command file "executable" in the command line
 			Subprocess subprocess = new Subprocess()
 			CompletedProcess cp = subprocess.run(Arrays.asList("chmod", "+x", commandFile.toString()))
