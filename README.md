@@ -139,16 +139,13 @@ When you run the Test Suite Collection `TSC` and when the Test Suite `TS1` has f
 What is the method does ?
 
 1. if the Test Suite `TS1` has been finished,
-2. in the `out` folder, create a file named `consume_TS_report.sh`
-3. identify the path of report folder
-4. the sh file contains a few lines of bash shell scripts for the following sub-processing:
+2. identify the path of report folder of `TS1`
+3. in the `out` folder, create a file named `consume_TS_report.sh`
+4. write a few lines of bash commands. The commands will do the following:
   * make a zip file of the report folder
   * move the zip file into the `out` folder
   * try to transfer the zip file by HTTP POST request to a remote URL
-5. do `chmod +x consume_TS_report.sh` to change its permission and make it executable in the commandline.
-
-The `out/consume_TS_Report.sh` is something like the following:
-
+5. The `out/consume_TS_Report.sh` is something like the following:
 ```
 zip Reports_20211023_172736 -r "Reports/20211023_172734/TS1/20211023_172736"
 mv Reports_20211023_172736.zip "out/"
@@ -156,6 +153,8 @@ mv Reports_20211023_172736.zip "out/"
 # I know this would fail
 curl -X POST https://localhost:80 -F 'file=@out/Reports_20211023_172736.zip'
 ```
+
+6. do "`chmod +x consume_TS_report.sh`" to change the file permission to make it executable in the OS command line.
 
 ### Second half
 
