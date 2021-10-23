@@ -103,10 +103,73 @@ I will create, by Groovy script (TestListener), a shell script file named `consu
 
 ## Proposed solution
 
-### Running Shell Script using the subprocessj library
+### Resolving timing issue
+
+You can not make a zip of the Test Suite `TS1` by TS1 itself. Possible solution is to create another Test Suite `TS_post_TS1_processing`. You want to create a Test Suite Collection `TSC` and let it call `TS1` and `TS_post_TS1_processing` sequentially in this order. At the timing when `TS_post_TS1_processing` is activated, the reports of `TS1` has been already compiled. The following Test Suites should be able to read the reports.
+
+### Resolving variable report folder path issue
+
+[`com.kms.katalon.core.configuration.RunConfiguration`](https://docs.katalon.com/javadoc/com/kms/katalon/core/configuration/RunConfiguration.html) class implements [String getReportFolder()](https://docs.katalon.com/javadoc/com/kms/katalon/core/configuration/RunConfiguration.html#getReportFolder()) method. With this method call, we can get to know the report folder path of the current Test Suite.
+
+### Resolving how to run command from Groovy
 
 The `java.lang.ProcessBuilder` class enables running arbitrary commands in a new process from Groovy script. The following article covers how to use it.
 
 - [How to run a Shell command in Java](https://www.baeldung.com/run-shell-command-in-java)
 
+However I found that ProcessBuilder is difficult to use for simple use cases. So I have developed a small wrapper for ProcessBuilder named `subprocessj`.
+
+The [jar](Drivers/subprocessj-0.1.0.jar) is already bundled in the `Drivers` folder of this Git project.
+
+You can download the jar of `subprocessj` from the Maven Central repository.
+- https://mvnrepository.com/artifact/com.kazurayam/subprocessj
+
+The tutorial of `subprocessj` is here:
+- https://kazurayam.github.io/subprocessj/
+
+The source code of `subprocessj` is hosted here:
+- https://github.com/kazurayam/subprocessj
+
 ## Description
+
+### First half
+
+When you run the Test Suite Collection `TSC` and when the Test Suite `TS1` has finished, the [Test Listeners/PostTS1Processor](Test%20Listeners/PostTS1Processor.groovy) will be invoked. It has `@AfterTestSuite`-annotated method. Please read the source.
+
+What is the method does ?
+
+1. if the Test Suite `TS1` has been finished,
+2. in the `out` folder, create a file named `consume_TS_report.sh`
+3. identify the path of report folder
+4. the sh file contains a few lines of bash shell scripts for the following sub-processing:
+  * make a zip file of the report folder
+  * move the zip file into the `out` folder
+  * try to transfer the zip file by HTTP POST request to a remote URL
+5. do `chmod +x consume_TS_report.sh` to change its permission and make it executable in the commandline.
+
+The `out/consume_TS_Report.sh` is something like the following:
+
+```
+zip Reports_20211023_172736 -r "Reports/20211023_172734/TS1/20211023_172736"
+mv Reports_20211023_172736.zip "out/"
+
+# I know this would fail
+curl -X POST https://localhost:80 -F 'file=@out/Reports_20211023_172736.zip'
+```
+
+### Second half
+
+The Test Suite Collection `TSC` will call the Test Suite `TS_post_TS1_processing` after `TS1`.
+
+`TS_post_TS1_processing` calls a Test Case [`TC_consume_TS1_report`](Scripts/TC_consume_TS1_report/Script1634894058026.groovy).
+
+What this test case does? For the detail, read the source code.
+
+1. The test case script locates the `out/consume_TS_report.sh`
+2. It forks a new OS process to calls `/bin/sh` (bash shell interpreter) while specifying the script file. In short, it execute the script file. It waits for the forked process to finish.
+3. When the forked process finished, the test case checks the return code. If the return code != 0, the test case fails.
+4. It prints the error messages from the forked process if any.
+
+
+
+
