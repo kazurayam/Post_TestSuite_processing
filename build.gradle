@@ -3,6 +3,9 @@ plugins {
   id "com.katalon.gradle-plugin" version "0.0.7"
 }
 
+group "com.kazurayam"
+version "0.1.0"
+
 repositories {
   mavenCentral()
 }
