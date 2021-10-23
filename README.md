@@ -153,8 +153,10 @@ mv Reports_20211023_172736.zip "out/"
 # I know this would fail
 curl -X POST https://localhost:80 -F 'file=@out/Reports_20211023_172736.zip'
 ```
-
 6. do "`chmod +x consume_TS_report.sh`" to change the file permission to make it executable in the OS command line.
+
+> In the `out/consume_TS_Report.sh` script file, I wrote a line of `curl` command to transfer the zip file to a URL (https://localhost:80), which will inevitably fail as the URL is not alive. This is just an example. You can do anything you like using shell commands here.
+
 
 ### Second half
 
