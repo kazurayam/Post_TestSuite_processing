@@ -75,12 +75,12 @@ TS1ReportDirLister output ----------------------------------------------
 executing: ls -la ./Reports/20211023_172734/TS1/20211023_172736
 return code = 0
 total 40
-drwxr-xr-x  6 kazuakiurayama  staff    192 Oct 23 17:27 .
-drwxr-xr-x  3 kazuakiurayama  staff     96 Oct 23 17:27 ..
--rw-r--r--  1 kazuakiurayama  staff   2649 Oct 23 17:27 execution.properties
--rw-r--r--  1 kazuakiurayama  staff  11108 Oct 23 17:27 execution0.log
--rw-r--r--  1 kazuakiurayama  staff      0 Oct 23 17:27 execution0.log.lck
--rw-r--r--  1 kazuakiurayama  staff     64 Oct 23 17:27 testCaseBinding
+drwxr-xr-x  6 kazurayam  staff    192 Oct 23 17:27 .
+drwxr-xr-x  3 kazurayam  staff     96 Oct 23 17:27 ..
+-rw-r--r--  1 kazurayam  staff   2649 Oct 23 17:27 execution.properties
+-rw-r--r--  1 kazurayam  staff  11108 Oct 23 17:27 execution0.log
+-rw-r--r--  1 kazurayam  staff      0 Oct 23 17:27 execution0.log.lck
+-rw-r--r--  1 kazurayam  staff     64 Oct 23 17:27 testCaseBinding
 ```
 
 This message is emitted by [Test Listeners/TS1ReportDirLister](Test%20Listeners/TS1ReportDirLister.groovy). It executes a Command `ls -la ./Reports/20211023_172734/TS1/20211023_172736` in the `@AfterTestSuite`-annotated method. As you can see, there is a bulky `execution0.log` file but no HTML/XML reports yet.
