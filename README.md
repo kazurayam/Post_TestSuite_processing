@@ -28,7 +28,7 @@ Please download this project, open it with your local Katalon Studio, run a Test
 2. Click the Execute button to run it. It will run for a few seconds. ![01_TSC](docs/images/01_TSC.png)
 3. The `TS1` will run for quckly and pass; `TS_post_TS1_proocessing ` will fail. It fails intentionally for demostration purpose. Don't mind it.
 4. Once `TSC` finished, a folder named `out` will be created under the project directory. ![02_out](docs/images/02_out_folder.png)
->However, Katalon Studio has a bug; *the`out` folder, which is newly created by script, will not become visible in the Test Explorer pane*. "Refresh" command does not work either. It's a shame. So, please close the project and reopen it. By doing so Katalon Studio will find the new `out` folder.
+>However, Katalon Studio has a bug; *the`out` folder, which is newly created by script, will not become visible in the Test Explorer pane*. Close the project and reopen it. Then Katalon Studio will find the new `out` folder.
 5. In the `out` folder, you will find two files created by the `TSC`. 
   * `out/consume_TS_report.sh`
   * `out/Reports_yyyyMMdd_hhmmss.zip`
