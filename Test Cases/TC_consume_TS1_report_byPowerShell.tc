@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestCaseEntity>
+   <description></description>
+   <name>TC_consume_TS1_report_byPowerShell</name>
+   <tag></tag>
+   <comment></comment>
+   <testCaseGuid>5a3f3239-3c45-4874-ace8-8efcb430941d</testCaseGuid>
+</TestCaseEntity>

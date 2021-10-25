@@ -15,6 +15,12 @@
       <guid>7b30db17-6c61-4f15-a2a5-081ec82a1970</guid>
       <isReuseDriver>false</isReuseDriver>
       <isRun>true</isRun>
-      <testCaseId>Test Cases/TC_consume_TS1_report</testCaseId>
+      <testCaseId>Test Cases/TC_consume_TS1_report_bySh</testCaseId>
+   </testCaseLink>
+   <testCaseLink>
+      <guid>a391dd5b-6f5b-4293-88c6-eedb12993a27</guid>
+      <isReuseDriver>false</isReuseDriver>
+      <isRun>false</isRun>
+      <testCaseId>Test Cases/TC_consume_TS1_report_byPowerShell</testCaseId>
    </testCaseLink>
 </TestSuiteEntity>

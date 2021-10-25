@@ -8,18 +8,15 @@ import com.kms.katalon.core.util.KeywordUtil
 import com.kazurayam.ks.posttestsuiteprocessing.CommandGenerator
 
 /**
- * This Test Case script calls /bin/sh (shell) specifying "./out/zipIt.sh" file as script.
- * The zipIt.sh files is prepared by the TestListner "TL".
- * The script in the zipIt.sh executes "zip" command to archive a directory created 
- * by preceding executio session of the Test Sute "TS1".
+ * This Test Case script calls /bin/sh (shell) specifying "./out/consume_TS_report.sh" file as script.
+ * The file is prepared by the TestListner "PostTS1Processor".
  */
 Path projectDir = Paths.get(RunConfiguration.getProjectDir())
 Path outDir = projectDir.resolve("out")
 Path commandFile = projectDir.relativize(outDir.resolve(CommandGenerator.SH_FILENAME))
 
-println "commandFileRelativePath: ${commandFile.toString()}"
+println "commandFile: ${commandFile.toString()}"
 
-// make a new process in which we call "/bin/sh" specifyiing the command file  
 Subprocess subprocess = new Subprocess()
 def cmd = Arrays.asList("/bin/sh", "-c", commandFile.toString())
 println "cmd = " + cmd.toString()

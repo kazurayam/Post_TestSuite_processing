@@ -33,17 +33,18 @@ class PostTS1Processor {
 			String timestamp = testSuiteReportDir.getFileName()
 			String archiveName = "Reports_" + timestamp
 			
-			// Shell script file to be generated here
-			Path commandFile = outDir.resolve(CommandGenerator.SH_FILENAME)
+			// generate Bash shell script file
+			Path shFile = outDir.resolve(CommandGenerator.SH_FILENAME)
+			// generate a sh script text, which create a zip of Report, and try to POST it to a URL
+			String sh = CommandGenerator.sh_zipAndPost(testSuiteReportDir, archiveName, outDir)
+			// write the sh script into the file
+			shFile.text = sh
 			
-			// generate a shell script file which create a zip of Report, and try to POST it to a URL
-			commandFile.text = CommandGenerator.doZipAndPost(testSuiteReportDir, archiveName, outDir)
-						
-			// do "chmod +x" to make the command file "executable" in the command line
-			Subprocess subprocess = new Subprocess()
-			CompletedProcess cp = subprocess.run(Arrays.asList("chmod", "+x", commandFile.toString()))
-			cp.stdout().forEach { line -> println line }
-			cp.stderr().forEach { line -> println line }
+			// generate PowerShell script file
+			Path ps1File = outDir.resolve(CommandGenerator.PWSH_FILENAME)
+			String ps1 = CommandGenerator.pwsh_zip(testSuiteReportDir, archiveName, outDir)
+			ps1File.text = ps1
 		}
 	}
+	
 }
